@@ -12,6 +12,7 @@
 mono_crash.*
 
 # User-specific files (VSCode)
+.vscode/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
