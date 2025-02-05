@@ -1,0 +1,6 @@
+@DependencyInjectionDemo_HostAddress = http://localhost:5020
+
+GET {{DependencyInjectionDemo_HostAddress}}/
+Accept: application/json
+
+###
