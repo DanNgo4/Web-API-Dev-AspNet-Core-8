@@ -1,0 +1,5 @@
+create new AspNet Core project with controllers:
+dotnet new webapi -n NewProject -controllers
+
+create new sln file:
+dotnet new sln -n "NewProject"
