@@ -1,3 +1,4 @@
+using DependencyInjectionDemo;
 using DependencyInjectionDemo.Interfaces;
 using DependencyInjectionDemo.Services;
 
@@ -15,14 +16,26 @@ builder.Services.AddScoped<IPostService, PostsService>();
 
 builder.Services.AddScoped<IDemoService, DemoService>();
 
-// AddScoped() method indicating that the service is created once per client request and disposed of upon completion of the request
-builder.Services.AddScoped<IScopedService, ScopedService>();
-// AddTransient() method indicating that the service is created each time IT is requested and disposed of at the end of the request
-builder.Services.AddTransient<ITransientService, TransientService>();
-// AddSingleton() method indicating the service instance will be the same through application lifetime
-builder.Services.AddSingleton<ISingletonService, SingletonService>();
+// using extension method for the IServiceCollection interface to register all IService services at once (group registration)
+builder.Services.AddLifetimeServices();
+
+// regiter keyed/named services to the service container
+builder.Services.AddKeyedScoped<IDataService, SqlDatabaseService>("sqlDatabaseService");
+builder.Services.AddKeyedScoped<IDataService, CosmosDatabaseService>("cosmosDatabaseService");
 
 var app = builder.Build();
+
+// creates a scope and resolves the IDemoService service from the service container
+// then it can use the service to do something
+// after the scope is disposed of, the service will be disposed as well
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+
+    var demoService = services.GetRequiredService<IDemoService>();
+    var message = demoService.SayHello();
+    Console.WriteLine(message);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
