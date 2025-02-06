@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DependencyInjectionDemo.Models;
-using DependencyInjectionDemo.Services;
+using DependencyInjectionDemo.Interfaces;
 
 namespace DependencyInjectionDemo.Controllers;
 
@@ -8,11 +8,12 @@ namespace DependencyInjectionDemo.Controllers;
 [Route("api/[controller]")]
 public class PostsController : ControllerBase
 {
-    private readonly PostsService _postsService;
+    private readonly IPostService _postsService;
 
-    public PostsController()
+    // the service container will inject the correct implementation (service) of IPostService interface into the controller
+    public PostsController(IPostService postService)
     {
-        _postsService = new PostsService();
+        _postsService = postService;
     }
 
     [HttpGet]
