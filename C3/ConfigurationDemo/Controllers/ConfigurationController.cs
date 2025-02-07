@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using ConfigurationDemo.Models;
 
 namespace ConfigurationDemo.Controllers;
@@ -35,6 +36,15 @@ public class ConfigurationController(IConfiguration configuration) : ControllerB
 
         // alternative implementation:
         // configuration.Bind(DatabaseOption.SectionName, databaseOption);
+
+        return Ok(new { databaseOption.Type, databaseOption.ConnectionString });
+    }
+
+    [HttpGet]
+    [Route("database-configuration-with-ioptions")]
+    public ActionResult GetDatabaseConfigurationWithIOptions([FromServices] IOptions<DatabaseOption> options)
+    {
+        var databaseOption = options.Value;
 
         return Ok(new { databaseOption.Type, databaseOption.ConnectionString });
     }
