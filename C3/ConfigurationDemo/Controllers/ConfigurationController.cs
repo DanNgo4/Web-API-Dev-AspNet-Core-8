@@ -41,11 +41,45 @@ public class ConfigurationController(IConfiguration configuration) : ControllerB
     }
 
     [HttpGet]
+    [Route("database-configuration-with-generic-type")]
+    public ActionResult GetDatabaseConfigurationWithGenericType()
+    {
+        var databaseOption = configuration.GetSection(DatabaseOption.SectionName).Get<DatabaseOption>();
+        return Ok(new { databaseOption?.Type, databaseOption?.ConnectionString });
+    }
+
+    [HttpGet]
     [Route("database-configuration-with-ioptions")]
     public ActionResult GetDatabaseConfigurationWithIOptions([FromServices] IOptions<DatabaseOption> options)
     {
         var databaseOption = options.Value;
 
         return Ok(new { databaseOption.Type, databaseOption.ConnectionString });
+    }
+
+    [HttpGet]
+    [Route("database-configuration-with-ioptions-snapshot")]
+    public ActionResult GetDatabaseConfigurationWithIOptionsSnapshot([FromServices] IOptionsSnapshot<DatabaseOption> options)
+    {
+        var databaseOption = options.Value;
+        return Ok(new { databaseOption.Type, databaseOption.ConnectionString });
+    }
+
+    [HttpGet]
+    [Route("database-configuration-with-options-monitor")]
+    public ActionResult GetDatabaseConfigurationWithIOptionsMonitor([FromServices] IOptionsMonitor<DatabaseOption> options)
+    {
+        var databaseOption = options.CurrentValue;
+        return Ok(new { databaseOption.Type, databaseOption.ConnectionString });
+    }
+
+    [HttpGet]
+    [Route("database-configuration-with-named-options")]
+    public ActionResult GetDatabaseConfigurationWithNamedOptions([FromServices] IOptionsSnapshot<DatabaseOptions> options)
+    {
+        var systemDatabaseOption    = options.Get(DatabaseOptions.SystemDatabaseSectionName);
+        var busisnessDatabaseOption = options.Get(DatabaseOptions.BusinessDatabaseSectionName);
+
+        return Ok(new { SystemDatabaseOption = systemDatabaseOption, BusisnessDatabaseOption = busisnessDatabaseOption });
     }
 }
