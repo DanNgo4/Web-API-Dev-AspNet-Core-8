@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationDemo", "ConfigurationDemo\ConfigurationDemo.csproj", "{93ABA448-456E-48FB-86CF-16E426A25AA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationDemo", "ConfigurationDemo.csproj", "{90D0C6A6-5E9E-42E4-ACAC-6E4336622C1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,9 @@ Global
 		{93ABA448-456E-48FB-86CF-16E426A25AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93ABA448-456E-48FB-86CF-16E426A25AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93ABA448-456E-48FB-86CF-16E426A25AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90D0C6A6-5E9E-42E4-ACAC-6E4336622C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90D0C6A6-5E9E-42E4-ACAC-6E4336622C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90D0C6A6-5E9E-42E4-ACAC-6E4336622C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90D0C6A6-5E9E-42E4-ACAC-6E4336622C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

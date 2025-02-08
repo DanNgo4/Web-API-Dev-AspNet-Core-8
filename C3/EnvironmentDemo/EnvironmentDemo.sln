@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvironmentDemo", "EnvironmentDemo\EnvironmentDemo.csproj", "{A64A7E56-4C6A-45A8-8FD7-917B6DA189D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvironmentDemo", "EnvironmentDemo.csproj", "{239D9BD1-DBFE-4B70-AD3E-6BEEF6EEDC26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,9 @@ Global
 		{A64A7E56-4C6A-45A8-8FD7-917B6DA189D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A64A7E56-4C6A-45A8-8FD7-917B6DA189D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A64A7E56-4C6A-45A8-8FD7-917B6DA189D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{239D9BD1-DBFE-4B70-AD3E-6BEEF6EEDC26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{239D9BD1-DBFE-4B70-AD3E-6BEEF6EEDC26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{239D9BD1-DBFE-4B70-AD3E-6BEEF6EEDC26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{239D9BD1-DBFE-4B70-AD3E-6BEEF6EEDC26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

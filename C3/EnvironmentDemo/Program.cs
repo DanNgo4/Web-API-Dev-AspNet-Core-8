@@ -1,5 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
+// read the environment variable ASPNETCORE_ENVIRONMENT
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+Console.WriteLine($"ASPNETCORE_ENVIRONMENT IS {environmentName}");
+
 // Add services to the container.
 
 builder.Services.AddControllers();

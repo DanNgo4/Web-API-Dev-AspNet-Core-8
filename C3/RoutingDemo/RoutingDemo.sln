@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutingDemo", "RoutingDemo\RoutingDemo.csproj", "{18A49AFE-ACFB-4214-99D1-1802B3A95F36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutingDemo", "RoutingDemo.csproj", "{AF467E11-AE83-4B8B-91B1-5F855811145F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,9 @@ Global
 		{18A49AFE-ACFB-4214-99D1-1802B3A95F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18A49AFE-ACFB-4214-99D1-1802B3A95F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18A49AFE-ACFB-4214-99D1-1802B3A95F36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF467E11-AE83-4B8B-91B1-5F855811145F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF467E11-AE83-4B8B-91B1-5F855811145F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF467E11-AE83-4B8B-91B1-5F855811145F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF467E11-AE83-4B8B-91B1-5F855811145F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
