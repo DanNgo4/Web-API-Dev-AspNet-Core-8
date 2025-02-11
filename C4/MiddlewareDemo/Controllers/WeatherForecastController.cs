@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace LoggingDemo.Controllers;
+namespace MiddlewareDemo.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -21,11 +21,6 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
-        _logger.LogInformation("This is a logging message.");
-        _logger.LogTrace("This is a trace message.");
-        _logger.LogInformation(EventIds.LoginEvent, "This is a logging message with event id.");
-        _logger.LogInformation("This is a logging message with args: Today is {Week}. It is {Time.}", DateTime.Now.DayOfWeek, DateTime.Now.ToLongTimeString());
-
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
