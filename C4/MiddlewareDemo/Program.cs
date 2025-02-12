@@ -42,6 +42,104 @@ app.Use(async (context, next) =>
     logger.LogInformation($"Response StatusCode in Middleware 2: {context.Response.StatusCode}");
 });
 
+app.Map("/lottery", app =>
+{
+    var random = new Random();
+    var luckyNumber = random.Next(1, 6);
+
+    app.UseWhen(context => context.Request.QueryString.Value == $"?{luckyNumber.ToString()}", app =>
+    {
+        app.Run(async context =>
+        {
+            await context.Response.WriteAsync($"You win! You got the lucky number{luckyNumber}!");
+        });
+    });
+
+    app.UseWhen(context => string.IsNullOrWhiteSpace(context.Request.QueryString.Value), app =>
+    {
+        app.Use(async (context, next) =>
+        {
+            var number = random.Next(1, 6);
+            context.Request.Headers.TryAdd("number", number.ToString());
+            await next(context);
+        });
+
+        app.UseWhen(context => context.Request.Headers["number"] == luckyNumber.ToString(), app =>
+        {
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync($"You win! You got the lucky number {luckyNumber}!");
+            });
+        });
+
+        app.Run(async context =>
+        {
+            var number = "";
+            if (context.Request.QueryString.HasValue)
+            {
+                number = context.Request.QueryString.Value?.Replace("?", "");
+            }
+            else
+            {
+                number = context.Request.Headers["number"];
+            }
+
+            await context.Response.WriteAsync($"Your number is {number}. Try again!");
+        });
+    });
+});
+
+app.Run(async context =>
+{
+    await context.Response.WriteAsync($"Use the /lottery URL to play. You can choose your number with the format /lottery?1.");
+});
+
+app.UseWhen(context => context.Request.Query.ContainsKey("branch"),
+app =>
+{
+    app.Use(async (context, next) =>
+    {
+        var logger = app.ApplicationServices.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation($"From UseWhen() : Branh used = {context.Request.Query["branch"]}");
+
+        await next();
+    });
+});
+
+app.Run(async context =>
+{
+    await context.Response.WriteAsync("Hello World");
+});
+
+app.MapWhen(context => context.Request.Query.ContainsKey("branch"),
+app =>
+{
+    app.Use(async (context, next) =>
+    {
+        var logger = app.ApplicationServices.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation($"From MapWhen(): Branch used = {context.Request.Query["branch"]}");
+        await next();
+    });
+});
+
+app.MapWhen(context => context.Request.Query.ContainsKey("branch"), 
+app =>
+{
+    app.Use(async (context, next) =>
+    {
+        var logger = app.ApplicationServices.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation($"From MapWhen(): Branch used = {context.Request.Query["branch"]}");
+        
+        await next();
+    });
+
+    app.Run(async context =>
+    {
+        var branchVer = context.Request.Query["branch"];
+        await context.Response.WriteAsync($"Branch used = {branchVer}");
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
