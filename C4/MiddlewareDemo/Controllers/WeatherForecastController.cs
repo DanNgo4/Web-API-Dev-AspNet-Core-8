@@ -21,6 +21,14 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        // Get the "X-Correlation-Id" header from the request
+        var correlationId = Request.Headers["X-Correlation-Id"].FirstOrDefault();
+        // Log the correlation ID
+        _logger.LogInformation("Handling the request. CorrelationId: {CorrelationId}", correlationId);
+        // Call another service with the same "X-Correlation-Id" header when setting up the HttpClient
+        var httpContent = new StringContent("Hello world!");
+        httpContent.Headers.Add("X-Correlation-Id", correlationId);
+
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

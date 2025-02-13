@@ -15,9 +15,28 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddRateLimiter(_ =>
+    _.AddFixedWindowLimiter(policyName: "fixed", options =>
+    {
+        options.PermitLimit = 5;
+        options.Window = TimeSpan.FromSeconds(10);
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 2;
+    })
+);
+
+builder.Services.AddRequestTimeouts();
+
 // Returns a WebApplication instance. It is the host for the web API project, which is responsible for app startup and lifetime management.
 // It also manages logging, DI, configuration, middleware, and so on.
 var app = builder.Build();
+
+app.UseCorrelationId();
+
+app.UseRateLimiter();
+app.MapGet("/rate-limiting-mini", () => Results.Ok($"Hello {DateTime.Now.Ticks.ToString()}")).RequireRateLimiting("fixed");
+
+app.UseRequestTimeouts();
 
 app.Use(async (context, next) =>
 {

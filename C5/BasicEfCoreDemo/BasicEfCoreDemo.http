@@ -1,0 +1,6 @@
+@BasicEfCoreDemo_HostAddress = http://localhost:5180
+
+GET {{BasicEfCoreDemo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
