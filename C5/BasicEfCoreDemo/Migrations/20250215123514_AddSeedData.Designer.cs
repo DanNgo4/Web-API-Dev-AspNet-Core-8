@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasicEfCoreDemo.Migrations
 {
     [DbContext(typeof(InvoiceDbContext))]
-    [Migration("20250214102154_InitialDb")]
-    partial class InitialDb
+    [Migration("20250215123514_AddSeedData")]
+    partial class AddSeedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,7 +61,7 @@ namespace BasicEfCoreDemo.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e901258c-87a6-4229-9a84-ac2485fcec68"),
+                            Id = new Guid("1c11e6b6-ceeb-4fa7-b0c9-9199aadd8aeb"),
                             Amount = 100m,
                             ContactName = "Iron Man",
                             Description = "Invoice for the first month",
@@ -72,7 +72,7 @@ namespace BasicEfCoreDemo.Migrations
                         },
                         new
                         {
-                            Id = new Guid("87447022-8ffc-40c5-8183-113185d6a272"),
+                            Id = new Guid("188dfa90-962e-4a8c-899e-fcc4a20c7130"),
                             Amount = 200m,
                             ContactName = "Captain America",
                             Description = "Invoice for the first month",
@@ -83,7 +83,7 @@ namespace BasicEfCoreDemo.Migrations
                         },
                         new
                         {
-                            Id = new Guid("54e2201a-42c5-444c-894b-6f8d347d4b05"),
+                            Id = new Guid("208dc8d0-3fa5-4cc8-8a43-9d95046968db"),
                             Amount = 300m,
                             ContactName = "Thor",
                             Description = "Invoice for the first month",
