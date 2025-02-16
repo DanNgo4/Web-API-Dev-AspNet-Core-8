@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BasicEfCoreDemo.Models;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using BasicEfCoreDemo.Models;
+using BasicEfCoreDemo.Enums;
 
 namespace BasicEfCoreDemo.Data
 {
@@ -22,7 +23,7 @@ namespace BasicEfCoreDemo.Data
                     Amount        = 100,
                     InvoiceDate   = new DateTimeOffset(2023, 1, 1, 0, 0, 0, TimeSpan.Zero),
                     DueDate       = new DateTimeOffset(2023, 1, 15, 0, 0, 0, TimeSpan.Zero),
-                    Status        = Enums.InvoiceStatus.AwaitPayment
+                    Status        = InvoiceStatus.AwaitPayment
                 },
                 new Invoice
                 {
@@ -33,7 +34,7 @@ namespace BasicEfCoreDemo.Data
                     Amount        = 200,
                     InvoiceDate   = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero),
                     DueDate       = new DateTimeOffset(2021, 1, 15, 0, 0, 0, TimeSpan.Zero),
-                    Status        = Enums.InvoiceStatus.AwaitPayment
+                    Status        = InvoiceStatus.AwaitPayment
                 },
                 new Invoice
                 {
@@ -44,9 +45,11 @@ namespace BasicEfCoreDemo.Data
                     Amount        = 300,
                     InvoiceDate   = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero),
                     DueDate       = new DateTimeOffset(2021, 1, 15, 0, 0, 0, 0, TimeSpan.Zero),
-                    Status        = Enums.InvoiceStatus.Draft
+                    Status        = InvoiceStatus.Draft
                 }
             );
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(InvoiceDbContext).Assembly);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

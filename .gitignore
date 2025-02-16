@@ -65,3 +65,7 @@ $RECYCLE.BIN/
 x64/
 [Bb]in/
 [Oo]bj/
+
+# Database files
+*.mdf
+*.ldf
