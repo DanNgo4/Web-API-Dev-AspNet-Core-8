@@ -19,7 +19,7 @@ public class InvoiceController : ControllerBase
 
     // GET: api/Invoices
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoices(int page = 1,
+    public async Task<ActionResult<IList<Invoice>>> GetInvoices(int page = 1,
                                                                       int pageSize = 10,
                                                                       InvoiceStatus? status = null)
     {

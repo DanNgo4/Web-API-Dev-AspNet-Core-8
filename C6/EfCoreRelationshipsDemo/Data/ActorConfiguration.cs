@@ -11,6 +11,7 @@ public class ActorConfiguration : IEntityTypeConfiguration<Actor>
         builder.ToTable("Actors");
         builder.HasKey(a => a.Id);
         builder.Property(p => p.Name).HasColumnName("Name").HasMaxLength(32).IsRequired();
+
         builder.HasIndex(p => p.Name).IsUnique();
     }
 }

@@ -7,11 +7,11 @@ namespace EfCoreRelationshipsDemo.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CategoriesController(SampleDbContext context) : ControllerBase
+public class CategoryController(SampleDbContext context) : ControllerBase
 {
     // GET: api/Categories
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    public async Task<ActionResult<IList<Category>>> GetCategories()
     {
         if (context.Categories == null)
             return NotFound();

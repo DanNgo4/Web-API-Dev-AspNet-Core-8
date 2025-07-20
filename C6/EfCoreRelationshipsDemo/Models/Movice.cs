@@ -9,6 +9,7 @@ public class Movie
     public string?          Description { get; set; }
     public int              ReleaseYear { get; set; }
     public List<Actor>      Actors      { get; set; } = new();
+
     [JsonIgnore]
     public List<MovieActor> MovieActors { get; set; } = new();
 }

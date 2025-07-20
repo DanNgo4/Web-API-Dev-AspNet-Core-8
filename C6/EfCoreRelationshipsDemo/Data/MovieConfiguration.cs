@@ -32,6 +32,7 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
                    }
                );
 
+        // Add a unique index to the Title property 
         builder.HasIndex(p => p.Title).IsUnique();
     }
 }

@@ -1,5 +1,6 @@
 namespace EfCoreRelationshipsDemo.Models;
 
+// Principal entity in One to One relationship with Address
 public class Contact
 {
     public Guid     Id        { get; set; }
