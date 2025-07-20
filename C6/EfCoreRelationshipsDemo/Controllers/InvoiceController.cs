@@ -27,12 +27,50 @@ public class InvoiceController : ControllerBase
             return NotFound();
 
         return await _context.Invoices
-                             .AsQueryable() // convert DbSet<Invoice> to IQueryable<Invoice>
+                             .Include(x => x.InvoiceItems)  
                              .Where(x => status == null || x.Status == status) // filter the data
                              .OrderByDescending(x => x.InvoiceDate)
                              .Skip((page - 1) * pageSize)
                              .Take(pageSize)
+                             .AsSplitQuery() // avoids Catesian explosion problem, which means the amount of duplicated data in the result is too large. This will query all the invoices, then query the invoice items
                              .ToListAsync(); // executes the query from the IQueryable object and returns the result
+
+        // generated query:
+        /* SELECT 
+         * [i].[Id], 
+         * [i].[Amount], 
+         * [i].[ContactName], 
+         * [i].[Description], 
+         * [i].[DueDate], 
+         * [i].[InvoiceDate], 
+         * [i].[InvoiceNumber], 
+         * [i].[Status]
+         * FROM [Invoices] AS [i]
+         * ORDER BY [i].[InvoiceDate] DESC, [i].[Id]
+         * OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+         * 
+         * SELECT 
+         * [i0].[Id], 
+         * [i0].[Amount], 
+         * [i0].[Description], 
+         * [i0].[InvoiceId], 
+         * [i0].[Name], 
+         * [i0].[Quantity], 
+         * [i0].[UnitPrice], 
+         * [t].[Id]      
+         * FROM (
+           * SELECT 
+           * [i].[Id], 
+           * [i].[InvoiceDate]
+           * FROM [Invoices] AS [i]
+           * ORDER BY [i].[InvoiceDate] DESC
+           * OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+         * ) AS [t]      
+         * INNER JOIN [InvoiceItems] AS [i0] 
+         * ON [t].[Id] = [i0].[InvoiceId]
+         * ORDER BY 
+         * [t].[InvoiceDate] DESC, 
+         * [t].[Id] */
     }
 
     // GET: api/Invoices/5
@@ -42,7 +80,29 @@ public class InvoiceController : ControllerBase
         if (_context.Invoices == null)
             return NotFound();
 
-        var invoice = await _context.Invoices.FindAsync(id);
+        var invoice = await _context.Invoices
+                                    .Include(x => x.InvoiceItems)
+                                    .SingleOrDefaultAsync(x => x.Id == id);
+
+        // generated query
+        /* SELECT 
+         * [i0].[Id], 
+         * [i0].[Amount], 
+         * [i0].[Description], 
+         * [i0].[InvoiceId], 
+         * [i0].[Name], 
+         * [i0].[Quantity], 
+         * [i0].[UnitPrice], 
+         * [t].[Id]
+         * FROM (
+           * SELECT TOP(1) 
+           * [i].[Id]
+           * FROM [Invoices] AS [i]
+           * WHERE [i].[Id] = @__id_0
+         * ) AS [t]
+         * INNER JOIN [InvoiceItems] AS [i0] 
+         * ON [t].[Id] = [i0].[InvoiceId]
+         * ORDER BY [t].[Id] */
 
         if (invoice == null)
             return NotFound();
@@ -117,6 +177,12 @@ public class InvoiceController : ControllerBase
         
 
         _context.Invoices.Remove(invoice);
+
+        // generated query
+        /* DELETE FROM [i]
+         * FROM [Invoices] AS [i]
+         * WHERE [i].[Id] = @__id_0 */
+
         await _context.SaveChangesAsync();
 
         return NoContent();
