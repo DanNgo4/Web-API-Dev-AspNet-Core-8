@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Register the DbContext instance as a scoped service in the DI container
 builder.Services.AddDbContext<SampleDbContext>();
 
 builder.Services.AddControllers()
