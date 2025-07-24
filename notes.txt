@@ -4,6 +4,9 @@ dotnet new webapi -n NewProject -controllers
 create new sln file:
 dotnet new sln -n NewProject
 
+link the project to the solution:
+dotnet sln add NewProject.csproj
+
 to stop and delete LocalDb instance on Windows with EF Core:
 sqllocaldb stop
 sqllocaldb delete
