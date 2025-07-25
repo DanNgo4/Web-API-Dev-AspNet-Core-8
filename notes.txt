@@ -1,12 +1,15 @@
-create new AspNet Core project with controllers:
+create new Asp.NET Core project with controllers:
 dotnet new webapi -n NewProject -controllers
 
-create new sln file:
+create new solution file:
 cd NewProject
 dotnet new sln -n NewProject
 
 link the project to the solution:
 dotnet sln add NewProject.csproj
+
+open solution in VS:
+devenv NewProject.sln
 
 to stop and delete LocalDb instance on Windows with EF Core:
 sqllocaldb stop
