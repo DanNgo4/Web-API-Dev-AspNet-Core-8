@@ -1,4 +1,4 @@
-﻿using AuthenticationDemo.Models.Authentication;
+﻿using AuthenticationDemo.Models.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
