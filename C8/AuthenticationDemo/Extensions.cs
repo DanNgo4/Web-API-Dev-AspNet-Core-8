@@ -1,10 +1,10 @@
-﻿using AuthenticationDemo.Models.User;
+﻿using AuthenticationDemo.Models.Authentication;
+using AuthenticationDemo.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AuthenticationDemo;
 
@@ -30,11 +30,25 @@ internal static class Extensions
 
         var userRoles = await userManager.GetRolesAsync(user);
 
-        var claims = new List<Claim>
+        // Role-based authorisation
+        /*var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.UserName)
         };
-        claims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
+        claims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));*/
+
+        // Claim-based authorisation
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+
+            // suppose the user's info is stored in the DB so that we can retrieve it from the DB
+            new Claim(ClaimTypes.Country, "New Zealand"),   
+
+            // custom claims
+            new Claim(AppClaimTypes.AccessNumber, "12345678"),
+            new Claim(AppClaimTypes.DrivingLicenseNumber, "123456789")
+        };
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

@@ -1,4 +1,5 @@
 using AuthenticationDemo.Models;
+using AuthenticationDemo.Models.Authentication;
 using AuthenticationDemo.Models.Role;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,5 +71,15 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
             .ToArray();
+    }
+
+    [Authorize(Policy = AppAuthorisationPolicies.RequireDrivingLicenseNumber)]
+    [HttpGet("driving-license")]
+    public IActionResult GetDrivingLicense()
+    {
+        var drivingLicenseNumber = User.Claims
+                                       .FirstOrDefault(x => x.Type == AppClaimTypes.DrivingLicenseNumber)?
+                                       .Value;
+        return Ok(new { drivingLicenseNumber });
     }
 }
