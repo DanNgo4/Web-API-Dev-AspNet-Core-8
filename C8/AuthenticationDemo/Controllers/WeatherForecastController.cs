@@ -3,6 +3,7 @@ using AuthenticationDemo.Models.Authentication;
 using AuthenticationDemo.Models.Role;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AuthenticationDemo.Controllers;
 
@@ -81,5 +82,42 @@ public class WeatherForecastController : ControllerBase
                                        .FirstOrDefault(x => x.Type == AppClaimTypes.DrivingLicenseNumber)?
                                        .Value;
         return Ok(new { drivingLicenseNumber });
+    }
+
+    [Authorize(Policy = AppAuthorisationPolicies.RequireCountry)]
+    [HttpGet("country")]
+    public IActionResult GetCountry()
+    {
+        var country = User.Claims
+                          .FirstOrDefault(x => x.Type == ClaimTypes.Country)?
+                          .Value;
+        return Ok(new { country });
+    }
+
+    /*[Authorize(Policy = AppAuthorisationPolicies.RequireDrivingLicenseNumber)]
+    [Authorize(Policy = AppAuthorisationPolicies.RequireAccessNumber)]*/
+    [Authorize(Policy = AppAuthorisationPolicies.RequireDrivingLicenseAndAccessNumber)]
+    [HttpGet("driving-license-and-access-number")]
+    public IActionResult GetDrivingLicenseAndAccessNumber()
+    {
+        var drivingLicenseNumber = User.Claims
+                                       .FirstOrDefault(x => x.Type == AppClaimTypes.DrivingLicenseNumber)?
+                                       .Value;
+
+        var accessNumber = User.Claims
+                               .FirstOrDefault(x => x.Type == AppClaimTypes.AccessNumber)?
+                               .Value;
+
+        return Ok(new { drivingLicenseNumber, accessNumber });
+    }
+
+    [Authorize(Policy = AppAuthorisationPolicies.SpecialPremiumContent)]
+    [HttpGet("special-premium")]
+    public IActionResult GetPremium()
+    {
+        var subscription = User.Claims
+                               .FirstOrDefault(x => x.Type == AppClaimTypes.Subscription)?
+                               .Value;
+        return Ok(new { subscription });
     }
 }

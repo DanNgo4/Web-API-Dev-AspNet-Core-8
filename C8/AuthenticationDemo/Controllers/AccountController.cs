@@ -8,15 +8,26 @@ namespace AuthenticationDemo.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AccountController(UserManager<AppUser> userManager, IConfiguration configuration)
+public class AccountController(UserManager<AppUser> userManager, 
+                               IConfiguration configuration, 
+                               SignInManager<AppUser> signInManager)
            : ControllerBase
 {
-    private readonly UserManager<AppUser> _userManager   = userManager;
-    private readonly IConfiguration       _configuration = configuration;
+    private readonly IConfiguration         _configuration = configuration;
+    private readonly UserManager<AppUser>   _userManager   = userManager;
+    private readonly SignInManager<AppUser> _signInManager = signInManager;
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] AddOrUpdateAppUserModel model)
     {
+        // Check if the email is unique
+        var existingEmail = await _userManager.FindByEmailAsync(model.Email);
+        if (existingEmail is not null)
+        {
+            ModelState.AddModelError("Email", "Email already exists");
+            return BadRequest(ModelState);
+        }
+
         if (ModelState.IsValid)
         {
             var existedUser = await _userManager.FindByNameAsync(model.UserName);
@@ -70,8 +81,8 @@ public class AccountController(UserManager<AppUser> userManager, IConfiguration 
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user is not null)
             {
-                var pwdValid = await _userManager.CheckPasswordAsync(user, model.Password);
-                if (pwdValid)
+                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
+                if (result.Succeeded)
                 {
                     var token = _configuration.GenerateToken(_userManager, user);
                     return Ok(new { token });
@@ -79,6 +90,29 @@ public class AccountController(UserManager<AppUser> userManager, IConfiguration 
             }
 
             // If the user is not found, display an error message
+            ModelState.AddModelError("", "Invalid username or password");
+        }
+
+        return BadRequest(ModelState);
+    }
+
+    [HttpPost("loginNewZealand")]
+    public async Task<IActionResult> LoginNewZealand([FromBody] LoginModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (user is not null)
+            {
+                var pwdValid = await _userManager.CheckPasswordAsync(user, model.Password);
+                if (pwdValid)
+                {
+                    var token = _configuration.GenerateToken(_userManager, user);
+
+                    return Ok(new { token });
+                }
+            }
+
             ModelState.AddModelError("", "Invalid username or password");
         }
 

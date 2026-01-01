@@ -38,7 +38,7 @@ internal static class Extensions
         claims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));*/
 
         // Claim-based authorisation
-        var claims = new[]
+        /*var claims = new[]
         {
             new Claim(ClaimTypes.Name, user.UserName),
 
@@ -48,6 +48,14 @@ internal static class Extensions
             // custom claims
             new Claim(AppClaimTypes.AccessNumber, "12345678"),
             new Claim(AppClaimTypes.DrivingLicenseNumber, "123456789")
+        };*/
+
+        // Policy-based authorisation
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(AppClaimTypes.Subscription, "Premium"),
+            new Claim(ClaimTypes.Country, user.Country)
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor

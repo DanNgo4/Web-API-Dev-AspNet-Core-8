@@ -2,7 +2,9 @@ using AuthenticationDemo.Data;
 using AuthenticationDemo.Models.Authentication;
 using AuthenticationDemo.Models.Role;
 using AuthenticationDemo.Models.User;
+using AuthenticationDemo.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -14,9 +16,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddIdentityCore<AppUser>() // add and configure the identity system for the specified User type
+                .AddSignInManager<AppUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+// new Identity API endpoints in ASP.NET Core 8
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+                .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.Configure<IdentityOptions>(x =>
+{
+    // Password settings
+    x.Password.RequireDigit = true;
+    x.Password.RequireLowercase = true;
+    x.Password.RequireUppercase = true;
+    x.Password.RequireNonAlphanumeric = true;
+    x.Password.RequiredLength = 8;
+    x.Password.RequiredUniqueChars = 1;
+
+    // User settings
+    x.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    x.User.RequireUniqueEmail = true;
+
+    // Lockout settings
+    x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    x.Lockout.MaxFailedAccessAttempts = 3;
+    x.Lockout.AllowedForNewUsers = true;
+});
 
 builder.Services.AddAuthentication(x =>
                 {
@@ -58,12 +85,31 @@ builder.Services.AddAuthorization(x =>
     // Claim-based authorisation
     x.AddPolicy(AppAuthorisationPolicies.RequireDrivingLicenseNumber, y => y.RequireClaim(AppClaimTypes.DrivingLicenseNumber));
     x.AddPolicy(AppAuthorisationPolicies.RequireAccessNumber, y => y.RequireClaim(AppClaimTypes.AccessNumber));
+    x.AddPolicy(AppAuthorisationPolicies.RequireCountry, y => y.RequireClaim(AppClaimTypes.Country, "New Zealand"));
+    x.AddPolicy(AppAuthorisationPolicies.RequireDrivingLicenseAndAccessNumber, y => y.RequireAssertion(z =>
+    {
+        var hasDrivingLicenseNumber = z.User.HasClaim(c => c.Type == AppClaimTypes.DrivingLicenseNumber);
+        var hasAccessNumber = z.User.HasClaim(c => c.Type == AppClaimTypes.AccessNumber);
+
+        return hasDrivingLicenseNumber && hasAccessNumber;
+    }));
+
+    // Policy-based authorisation
+    x.AddPolicy(AppAuthorisationPolicies.SpecialPremiumContent, y =>
+    {
+        y.Requirements.Add(new SpecialPremiumContentRequirement("New Zealand"));
+    });
 });
+
+builder.Services.AddSingleton<IAuthorizationHandler, SpecialPremiumContentAuthorisationHandler>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.MapGroup("/identity")
+   .MapIdentityApi<AppUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

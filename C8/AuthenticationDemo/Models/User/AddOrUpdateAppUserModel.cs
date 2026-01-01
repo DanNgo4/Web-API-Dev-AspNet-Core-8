@@ -1,16 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AuthenticationDemo.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuthenticationDemo.Models.User;
 
 public class AddOrUpdateAppUserModel
 {
     [Required(ErrorMessage = "User name is required")]
-    public string UserName { get; set; } = string.Empty;
+    public string   UserName { get; set; } = string.Empty;
 
     [EmailAddress]
     [Required(ErrorMessage = "Email is required")]
-    public string Email    { get; set; } = string.Empty;
+    public string   Email    { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Password is required")]
-    public string Password { get; set; } = string.Empty;
+    public string   Password { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Birthday is required")]
+    [Adult]
+    public DateTime Birthday { get; set; }
 }
