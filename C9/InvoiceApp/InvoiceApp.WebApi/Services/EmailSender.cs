@@ -24,7 +24,7 @@ public class EmailSender : IEmailSender
             Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
         };
 
-        MailMessage message = new(fromAddress, toAddress)
+        var message = new MailMessage(fromAddress, toAddress)
         {
             Subject = subject,
             Body = body

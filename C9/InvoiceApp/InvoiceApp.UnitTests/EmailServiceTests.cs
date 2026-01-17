@@ -27,10 +27,10 @@ public class EmailServiceTests
             DueDate = dueDate,
             Contact = new Contact
             {
-                Id = Guid.NewGuid(),
+                Id        = Guid.NewGuid(),
                 FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@example.com"
+                LastName  = "Doe",
+                Email     = "john.doe@example.com"
             },
             Status = InvoiceStatus.Draft,
             InvoiceDate = invoiceDate,
@@ -80,5 +80,20 @@ public class EmailServiceTests
                          InvoiceApp
                      """, 
                      body);*/
+    }
+
+    [Fact]
+    public async Task SendEmailAsync_Should_Send_Email()
+    {
+        // Arrange
+        var to = "user@example.com";
+        var subject = "Test Email";
+        var body = "Hello, this is a test email";
+        var sender = new Mock<IEmailSender>();
+
+        sender.Setup(x => x.SendEmailAsync(It.IsAny<string>(), 
+                                           It.IsAny<string>(), 
+                                           It.IsAny<string>()))
+              .Returns(Task.CompletedTask);
     }
 }
