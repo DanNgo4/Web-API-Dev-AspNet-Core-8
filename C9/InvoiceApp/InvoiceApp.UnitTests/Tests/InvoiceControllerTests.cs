@@ -9,13 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace InvoiceApp.UnitTests.Tests;
-public class InvoiceControllerTests(TestDatabaseFixture fixture) : IClassFixture<TestDatabaseFixture>
+public class InvoiceControllerTests 
+           : IClassFixture<TestDatabaseFixture>
 {
+    private readonly TestDatabaseFixture _fixture;
+
+    public InvoiceControllerTests(TestDatabaseFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact]
     public async Task GetInvoices_ShouldReturnInvoices()
     {
         // Arrange
-        await using var dbContext = fixture.CreateDbContext();
+        await using var dbContext = _fixture.CreateDbContext();
 
         var emailServiceMock = new Mock<IEmailService>();
 
@@ -48,14 +56,14 @@ public class InvoiceControllerTests(TestDatabaseFixture fixture) : IClassFixture
     public async Task GetInvoicesByStatus_ShouldReturnInvoices(InvoiceStatus status)
     {
         // Arrange
-        await using var dbContext = fixture.CreateDbContext();
+        await using var dbContext = _fixture.CreateDbContext();
 
         var emailServiceMock = new Mock<IEmailService>();
 
         var controller = new InvoiceController(dbContext, emailServiceMock.Object);
 
         // Act
-        var actionResult = await controller.GetInvoicesAsync(status: status);
+        var actionResult = await controller.GetInvoicesAsync(status);
 
         // Assert
         var result = actionResult.Result as OkObjectResult;
@@ -72,7 +80,7 @@ public class InvoiceControllerTests(TestDatabaseFixture fixture) : IClassFixture
     public async Task CreateInvoice_ShouldCreateInvoice()
     {
         // Arrange
-        await using var dbContext = fixture.CreateDbContext();
+        await using var dbContext = _fixture.CreateDbContext();
 
         var emailServiceMock = new Mock<IEmailService>();
 
@@ -131,7 +139,7 @@ public class InvoiceControllerTests(TestDatabaseFixture fixture) : IClassFixture
     public async Task UpdateInvoice_ShouldUpdateInvoice()
     {
         // Arrange
-        await using var dbContext = fixture.CreateDbContext();
+        await using var dbContext = _fixture.CreateDbContext();
 
         var emailServiceMock = new Mock<IEmailService>();
 
@@ -155,6 +163,9 @@ public class InvoiceControllerTests(TestDatabaseFixture fixture) : IClassFixture
         await controller.UpdateInvoiceAsync(invoice.Id, invoice);
 
         // Assert
+        // Explicitly lear the change tracker, it's used to track the changes made to the entities
+        // If we don't clear the change tracker, we'll get the tracked entities
+        // instead of querying the DB
         dbContext.ChangeTracker.Clear();
 
         var invoiceUpdated = await dbContext.Invoices.SingleAsync(x => x.Id == invoice.Id);

@@ -51,6 +51,13 @@ public class InvoiceController(InvoiceDbContext dbContext, IEmailService emailSe
         invoice.InvoiceItems.ForEach(x => x.Amount = x.UnitPrice * x.Quantity);
         invoice.Amount = invoice.InvoiceItems.Sum(x => x.Amount);
 
+        var contact = await dbContext.Contacts.FindAsync(invoice.ContactId);
+        if (contact == null)
+        {
+            return BadRequest("Contact not found.");
+        }
+        invoice.Contact = contact;
+
         await dbContext.Invoices.AddAsync(invoice);
         await dbContext.SaveChangesAsync();
 
