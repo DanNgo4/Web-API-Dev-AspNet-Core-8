@@ -1,4 +1,4 @@
-﻿namespace ClaimBasedAuthorizationDemo.Authentication;
+﻿namespace ClaimBasedAuthorisationDemo.Authentication;
 
 public static class AppClaimTypes
 {

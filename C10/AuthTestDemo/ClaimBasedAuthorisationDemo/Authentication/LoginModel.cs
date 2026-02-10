@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ClaimBasedAuthorizationDemo.Authentication;
+namespace ClaimBasedAuthorisationDemo.Authentication;
 
 public class LoginModel
 {

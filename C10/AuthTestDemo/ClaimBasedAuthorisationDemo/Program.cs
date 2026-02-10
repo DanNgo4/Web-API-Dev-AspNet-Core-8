@@ -1,6 +1,5 @@
 using ClaimBasedAuthorisationDemo.Authentication;
 using ClaimBasedAuthorisationDemo.Data;
-using ClaimBasedAuthorizationDemo.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -116,4 +115,3 @@ app.MapControllers();
 app.Run();
 
 public partial class Program { }
-
