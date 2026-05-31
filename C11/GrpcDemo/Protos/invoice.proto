@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
 option csharp_namespace = "GrpcDemo.Protos";
 
 service Invoice {}
@@ -19,4 +22,10 @@ message CreateContactRequest {
 	string phone = 4;
 	int32 year_of_birth = 5;
 	bool is_active = 6;
+}
+
+message UpdateInvoiceDueDateRequest {
+  string invoice_id = 1;
+  google.protobuf.Timestamp due_date = 2;
+  google.protobuf.Duration grace_period = 3;
 }
